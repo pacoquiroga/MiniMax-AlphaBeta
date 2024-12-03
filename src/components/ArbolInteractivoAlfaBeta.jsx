@@ -43,34 +43,31 @@ const ArbolInteractivoAlfaBeta = () => {
     setErrorMessage(""); 
   };
 
-  const alphaBetaAnimated = async (
-    node,
-    alpha = -Infinity,
-    beta = Infinity,
-    isMaximizing = true
-  ) => {
+  const alphaBetaAnimated = async (node, alpha = -Infinity, beta = Infinity, isMaximizing = true) => {
     node.highlight = true;
     node.alpha = alpha; // Asignar alpha al nodo
     node.beta = beta; // Asignar beta al nodo
     setTree({ ...tree });
     await new Promise((resolve) => setTimeout(resolve, delay));
-
+  
     if (node.children.length === 0) {
       node.highlight = false;
       setTree({ ...tree });
       return node.value;
     }
-
+  
     let value = isMaximizing ? -Infinity : Infinity;
-
-    for (const child of node.children) {
+  
+    for (let i = 0; i < node.children.length; i++) {
+      const child = node.children[i];
+  
       const childValue = await alphaBetaAnimated(
         child,
         alpha,
         beta,
         !isMaximizing
       );
-
+  
       if (isMaximizing) {
         value = Math.max(value, childValue);
         alpha = Math.max(alpha, value);
@@ -78,24 +75,28 @@ const ArbolInteractivoAlfaBeta = () => {
         value = Math.min(value, childValue);
         beta = Math.min(beta, value);
       }
-
+  
       node.alpha = alpha;
       node.beta = beta;
       setTree({ ...tree });
-
+  
+      
       if (beta <= alpha) {
-        child.pruned = true;
-        break;
+        if (i + 1 < node.children.length) {
+          node.children[i + 1].pruned = true; 
+        }
+        break; 
       }
     }
-
+  
     node.value = value;
     node.highlight = false;
     setTree({ ...tree });
     await new Promise((resolve) => setTimeout(resolve, delay));
-
+  
     return value;
   };
+  
 
   const handleAlphaBetaAnimated = async () => {
     if (tree.value !== 0) {
@@ -155,7 +156,7 @@ const ArbolInteractivoAlfaBeta = () => {
       </div>
 
       <div className="flex items-center mb-4">
-        <label htmlFor="delay-slider" className="mr-2 text-gray-700 font-medium">
+        <label htmlFor="delay-slider" className="mr-2 text-white font-medium">
           Delay de Animación ({delay}ms):
         </label>
         <input

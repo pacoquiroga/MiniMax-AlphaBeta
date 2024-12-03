@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import ArbolD3 from "./ArbolD3";
-import Modal from "./Modal"; // Asegúrate de que el componente Modal esté importado
-import Alert from "./Alert"; // Asegúrate de que el componente Alert esté importado
+import Modal from "./Modal"; 
+import Alert from "./Alert"; 
 
 const ArbolInteractivo = () => {
   const [tree, setTree] = useState({
